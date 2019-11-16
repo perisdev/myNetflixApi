@@ -1,7 +1,7 @@
 const childProcess = require('child_process');
 
 
-const loggingMiddleware = (req, res, next) => {
+const logMiddleware = (req, res, next) => {
     const whatToLog = req.method + ' ' + req.path
 
     console.log(whatToLog);
@@ -13,4 +13,4 @@ const loggingMiddleware = (req, res, next) => {
 
 
 
-module.exports = loggingMiddleware
+module.exports = logMiddleware

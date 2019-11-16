@@ -1,28 +1,30 @@
-const fs = require('fs');
 const { generateId } = require('../tools');
 
 const loginController = (req, res) => {
   const user = req.body;
-  const db = JSON.parse(fs.readFileSync('./db.json', 'utf-8'));
 
-  const foundUser = db.users.find(
-    existentUser =>
-      existentUser.email === user.email &&
-      existentUser.password === user.password,
-  );
+  const UserModel = require('../models/User');
 
-  if (foundUser) {
-    const token = generateId();
+  UserModel.findOne({ username: user.username, password: user.password })
+    .then(item => {
+      // login OK
+      if (item) {
+        const token = generateId();
 
-    foundUser.token = token;
-
-    fs.writeFileSync('./db.json', JSON.stringify(db, null, 2));
-    res
-      .status(200)
-      .json({ message: `valid login`, user: foundUser });
-  } else {
-    res.status(401).json({ message: `invalid login` });
-  }
+        UserModel.findByIdAndUpdate(item._id , {
+          token: token                   
+        }, {new:true, useFindAndModify:false})
+        .then(user => res.status(200).json({ message: `... login successful ...`, token: user.token}))
+        .catch(err => {
+          res.status(500).json({ message: `Login() error: ${err}`});
+          console.log(err)
+        });          
+        
+      // login KO
+      } else {
+        res.status(400).json({ message: `... login failed ...` });
+      }
+    });
 };
 
 module.exports = loginController;

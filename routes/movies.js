@@ -1,13 +1,8 @@
 const express = require('express');
 const router = express.Router();
 
-const MovieModel = require('../models/Movie');
+const moviesFilterController = require('../controllers/moviesFilterController');
 
-router.get('/', (req, res) => {
-  MovieModel.find({})
-  .then((movie) => {
-    res.send(movie);
-  })
-});
+router.get("/", moviesFilterController);
 
 module.exports = router;

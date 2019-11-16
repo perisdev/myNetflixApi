@@ -1,23 +1,17 @@
-const fs = require('fs');
+const UserModel = require('../models/User');
 
 const logoutController = (req, res) => {
 
-
-  const db = JSON.parse(fs.readFileSync('./db.json', 'utf-8'));
-  const token = req.user.token;
-  const foundUser = db.users.find(
-    existentUser => existentUser.token === token,
-  );
-
-  if (foundUser) {
-    delete foundUser.token;
-    fs.writeFileSync('./db.json', JSON.stringify(db, null, 2));
-    res
-      .status(200)
-      .json({ message: `valid logout`});
-  } else {
-    res.status(500).json({ message: `ops` });
-  }
-};
+  UserModel.findById(req.user._id)
+    .then(item => {
+      item.token = undefined;
+      item.save();
+      res.status(200).json({ message: `... valid logout ...` })
+    })
+    .catch(err => {
+      res.status(500).json({ message: `logout error: ${err}` });
+      console.log('logout error:', err);
+    });
+}
 
 module.exports = logoutController;
