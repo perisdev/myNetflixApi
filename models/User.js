@@ -7,7 +7,12 @@ const UserSchema = mongoose.Schema({
     required: true
   },
   password: String,
-  token: String
+  token: String,
+  order: {
+    movieId: Number,
+    dateRent: Date,
+    dateArrival: Date
+  }
 }, { versionkey: false });
 
 const UserModel = mongoose.model('user', UserSchema);

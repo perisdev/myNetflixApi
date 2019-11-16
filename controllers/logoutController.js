@@ -2,7 +2,7 @@ const UserModel = require('../models/User');
 
 const logoutController = (req, res) => {
 
-  UserModel.findById(req.user._id)
+  UserModel.findById(req.info.user._id)
     .then(item => {
       item.token = undefined;
       item.save();

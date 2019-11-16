@@ -6,7 +6,11 @@ const tokenTestMiddleware = (req, res, next) => {
 
   UserModel.findOne({ token: token }).then(item => {
     if (item) {
-      req.user = item;
+      req.info = {
+        "user": item,
+        "order": req.body
+      };
+      // req.info = [item, req.body];  // 0. user  1. order
       next();
     } else {
       res.status(401).json({ message: "... invalid token ..." });
