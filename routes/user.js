@@ -1,16 +1,18 @@
+const express = require('express');
+const router = express.Router();
+
+// controllers
 const registerController = require("../controllers/registerController");
 const loginController = require("../controllers/loginController");
 const logoutController = require("../controllers/logoutController");
 const profileController = require("../controllers/profileController");
 
-// const logMiddleware = require('../middlewares/logMiddleware');
+// middlewares
 const tokenTestMiddleware = require("../middlewares/tokenTestMiddleware");
-
-let express = require('express');
-let router = express.Router();
-
+// const logMiddleware = require('../middlewares/logMiddleware');
 // router.use(logMiddleware);
 
+// routes
 router.get("/profile", tokenTestMiddleware, profileController);
 router.post("/register", registerController);
 router.post("/login", loginController);

@@ -1,7 +1,10 @@
-const MovieModel = require('../models/Movie');
+/** 
+ * builds filter movies by 'id' and/or  'genre'
+ * ------------------------------------------------*/
+
 const GenreModel = require('../models/Genre');
 
-const moviesFilterController = (req, res) => {
+const moviesFilterMiddleware = (req, res, next) => {
 
   const filter = {};
 
@@ -19,8 +22,9 @@ const moviesFilterController = (req, res) => {
           filter.genre_ids = item._id;
       })
 
-    MovieModel.find(filter).then(items => res.status(200).send(items));
+    req.filter = filter;
+    next();
   })();
 };
 
-module.exports = moviesFilterController;
+module.exports = moviesFilterMiddleware;
