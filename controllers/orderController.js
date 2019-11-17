@@ -12,20 +12,11 @@ const orderController = (req, res) => {
         return res.status(400).json({ message: '... user already has a movie rented ...' });
 
       (async () => {
-        let dateArrival = new Date();
-        let deliverDays = null;
-        let regexp = new RegExp(`\\b${order.deliveryCity}\\b`, 'i');
-
-        await CityModel.findOne({ name: regexp })
-          .then(item => deliverDays = (item) ? item.deliverDays : 1);
-
-        dateArrival.setDate(dateArrival.getDate() + deliverDays);
-
         UserModel.findByIdAndUpdate(user._id, {
           order: {
             movieId: order.movieId,
             dateRent: Date.now(),
-            dateArrival: dateArrival
+            dateArrival: await getDateArrival(order.deliveryCity)
           },
           $push: {
             orders: {
@@ -39,8 +30,8 @@ const orderController = (req, res) => {
             res.status(500).json({ message: `rent error: ${err}` });
             console.log(err)
           });
-
       })();
+
       break;
 
     case 'return':
@@ -57,7 +48,11 @@ const orderController = (req, res) => {
           res.status(500).json({ message: `return error: ${err}` });
           console.log('return error:', err);
         });
-        
+
+      break;
+
+    case 'delivery':
+      (async () => res.status(200).json({ dateArrival: await getDateArrival(order.deliveryCity) }))();
       break;
 
     default:
@@ -65,5 +60,17 @@ const orderController = (req, res) => {
       break;
   }
 };
+
+const getDateArrival = async (city) => {
+
+  let dateArrival = new Date();
+  let regexp = new RegExp(`\\b${city}\\b`, 'i');
+
+  return await CityModel.findOne({ name: regexp })
+    .then(item => {
+      dateArrival.setDate(dateArrival.getDate() + ((item) ? item.deliverDays : 1));
+      return dateArrival;
+    });
+}
 
 module.exports = orderController;
