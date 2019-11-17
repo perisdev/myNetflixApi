@@ -18,6 +18,12 @@ const orderController = (req, res) => {
           movieId: order.movieId,
           dateRent: Date.now(),
           dateArrival: dateArrival
+        },
+        $push: {
+          orders: {
+            movieId: order.movieId,
+            dateRent: Date.now()
+          }
         }
       }, { new: true, useFindAndModify: false })
         .then(() => res.status(200).json({ message: `... rent successful ...` }))

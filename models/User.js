@@ -8,11 +8,21 @@ const UserSchema = mongoose.Schema({
   },
   password: String,
   token: String,
+
+  // current order
   order: {
     movieId: Number,
     dateRent: Date,
     dateArrival: Date
-  }
+  },
+
+  // historic of orders
+  orders: [{
+    _id: false,
+    movieId: Number,
+    dateRent: Date
+  }]
+
 }, { versionkey: false });
 
 const UserModel = mongoose.model('user', UserSchema);
