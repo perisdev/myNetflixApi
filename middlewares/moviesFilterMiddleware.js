@@ -21,6 +21,10 @@ const moviesFilterMiddleware = (req, res, next) => {
         if (item)
           filter.genre_ids = item._id;
       })
+      .catch(err => {
+        res.status(500).json({ message: `genre error: ${err}`});
+        console.log(err)
+      });      
 
     req.filter = filter;
     next();
