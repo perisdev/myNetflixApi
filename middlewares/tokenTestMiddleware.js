@@ -1,4 +1,8 @@
-const UserModel = require('../models/User');
+/**
+ * Token authentication control
+ * -------------------------------*/
+
+ const UserModel = require('../models/User');
 
 const tokenTestMiddleware = (req, res, next) => {
 
@@ -8,9 +12,10 @@ const tokenTestMiddleware = (req, res, next) => {
     if (item) {
       req.info = {
         "user": item,
-        "order": req.body
+        "order": req.body,
+        "deliveryCity": req.query.city
       };
-      // req.info = [item, req.body];  // 0. user  1. order
+
       next();
     } else {
       res.status(401).json({ message: "... invalid token ..." });

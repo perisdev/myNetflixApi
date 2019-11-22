@@ -1,3 +1,9 @@
+/** 
+ * POST - controls rent and return of movies.
+ * 
+ * GET - responds with a delivery date based on destination city
+ * ---------------------------------------------------------------*/
+
 const UserModel = require('../models/User');
 const CityModel = require('../models/City');
 
@@ -5,6 +11,9 @@ const orderController = (req, res) => {
 
   let user = req.info.user;
   let order = req.info.order;
+
+  if (!order.type)
+    order.type = 'delivery';
 
   switch (order.type) {
     case 'rent':
@@ -16,19 +25,22 @@ const orderController = (req, res) => {
           order: {
             movieId: order.movieId,
             dateRent: Date.now(),
-            dateArrival: await getDateArrival(order.deliveryCity)
+            dateArrival: await getDateArrival(order.deliveryCity),
+            daysRent: order.daysRent,
+            price: order.price
           },
           $push: {
             orders: {
               movieId: order.movieId,
-              dateRent: Date.now()
+              dateRent: Date.now(),
+              daysRent: order.daysRent,
+              price: order.price
             }
           }
         }, { new: true, useFindAndModify: false })
           .then(() => res.status(200).json({ message: `... rent successful ...` }))
           .catch(err => {
             res.status(500).json({ message: `rent error: ${err}` });
-            console.log(err)
           });
       })();
 
@@ -46,13 +58,12 @@ const orderController = (req, res) => {
         })
         .catch(err => {
           res.status(500).json({ message: `return error: ${err}` });
-          console.log('return error:', err);
         });
 
       break;
 
     case 'delivery':
-      (async () => res.status(200).json({ dateArrival: await getDateArrival(order.deliveryCity) }))();
+      (async () => res.status(200).json({ dateArrival: await getDateArrival(req.info.deliveryCity) }))();
       break;
 
     default:
@@ -70,6 +81,9 @@ const getDateArrival = async (city) => {
     .then(item => {
       dateArrival.setDate(dateArrival.getDate() + ((item) ? item.deliverDays : 1));
       return dateArrival;
+    })
+    .catch(err => {
+      return res.status(500).json({ message: `Date Arrival error: ${err}` });
     });
 }
 

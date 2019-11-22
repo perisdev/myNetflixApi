@@ -8,6 +8,9 @@ const tokenTestMiddleware = require('../middlewares/tokenTestMiddleware');
 const orderController = require('../controllers/orderController');
 
 // routes
-router.post("/", tokenTestMiddleware, orderController);
+router.use(tokenTestMiddleware);
+
+router.post("/", orderController);
+router.get("/delivery", orderController);
 
 module.exports = router;

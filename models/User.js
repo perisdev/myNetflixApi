@@ -13,14 +13,18 @@ const UserSchema = mongoose.Schema({
   order: {
     movieId: Number,
     dateRent: Date,
-    dateArrival: Date
+    dateArrival: Date,
+    daysRent: Number,
+    price: Number
   },
 
   // historic of orders
   orders: [{
     _id: false,
     movieId: Number,
-    dateRent: Date
+    dateRent: Date,
+    daysRent: Number,
+    price: Number
   }]
 
 }, { versionkey: false });

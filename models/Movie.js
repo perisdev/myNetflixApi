@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
 
 const MovieSchema = mongoose.Schema({
+  type: Number,
   popularity: Number,
   vote_count: Number,
   video: Boolean,

@@ -8,6 +8,8 @@ const indexRouter = require('./routes/index');
 const userRouter = require('./routes/user');
 const moviesRouter = require('./routes/movies');
 const orderRouter = require('./routes/order');
+const cityRouter = require('./routes/city');
+const priceRouter = require('./routes/price');
 
 const app = express();
 
@@ -21,6 +23,8 @@ app.use('/', indexRouter);
 app.use('/user', userRouter);
 app.use('/movies', moviesRouter);
 app.use('/order', orderRouter);
+app.use('/cities', cityRouter);
+app.use('/price', priceRouter);
 
 mongoose.connect('mongodb://localhost:27017/dbMovies', { useNewUrlParser: true, useUnifiedTopology: true, useCreateIndex: true })    // devuelve una promesa
   .then(() => console.log('conectado a mongoDB'))

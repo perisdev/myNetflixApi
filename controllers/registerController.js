@@ -38,7 +38,7 @@ const registerController = (req, res) => {
     .then(item => {
       // user already exists
       if (item) {
-        res.status(400).json({ message: `user ${user.username}, already exists..` });
+        res.status(401).json({ message: `user ${user.username}, already exists..` });
       
       // register new user
       } else {
@@ -51,7 +51,6 @@ const registerController = (req, res) => {
 
           res.status(200).json({ message: `${user.username} has been successfully registered` });
         } catch (err) {
-          console.log(err);
           res.status(500).json({ message: `save() error: ${err}`});
         }
       }

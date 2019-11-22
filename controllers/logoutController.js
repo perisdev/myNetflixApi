@@ -10,7 +10,6 @@ const logoutController = (req, res) => {
     })
     .catch(err => {
       res.status(500).json({ message: `logout error: ${err}` });
-      console.log('logout error:', err);
     });
 }
 
