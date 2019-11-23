@@ -6,7 +6,7 @@ const registerController = (req, res) => {
   if (!longitudPattern.test(user.password)) {
     return res
       .status(400)
-      .json({ message: `password too short` });
+      .json({ message: `password too short`, cod: 0 });
   }
 
   const digitCharacters = /\d/;
@@ -14,21 +14,21 @@ const registerController = (req, res) => {
   if (!digitCharacters.test(user.password)) {
     return res
       .status(400)
-      .json({ message: `password must have a digit` });
+      .json({ message: `password must have a digit`, cod: 1 });
   }
   const capitalCharacters = /[A-Z]/;
 
   if (!capitalCharacters.test(user.password)) {
     return res
       .status(400)
-      .json({ message: `password must have a capitalCase` });
+      .json({ message: `password must have a capitalCase`, cod: 2 });
   }
   const expecialCharacters = /[!|@#$%¬/()\[\]\+\*\{\}]/;
 
   if (!expecialCharacters.test(user.password)) {
     return res
       .status(400)
-      .json({ message: `password must have a special character` });
+      .json({ message: `password must have a special character`, cod: 3 });
   }
 
   const UserModel = require('../models/User');
@@ -50,7 +50,7 @@ const registerController = (req, res) => {
 
           res.status(200).json({ message: `${user.username} has been successfully registered` });
         } catch (err) {
-          res.status(500).json({ message: `save() error: ${err}` });
+          res.status(500).json({ message: `save user error: ${err}` });
         }
       }
     });
