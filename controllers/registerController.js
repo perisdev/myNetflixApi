@@ -1,4 +1,3 @@
-
 const registerController = (req, res) => {
   const user = req.body;
 
@@ -39,19 +38,19 @@ const registerController = (req, res) => {
       // user already exists
       if (item) {
         res.status(401).json({ message: `user ${user.username}, already exists..` });
-      
-      // register new user
+
+        // register new user
       } else {
         try {
-          (async () => await new UserModel({
-            // ...req.body
+          new UserModel({
             username: user.username,
-            password: user.password
-          }).save())();
+            password: user.password,
+            email: user.email
+          }).save();
 
           res.status(200).json({ message: `${user.username} has been successfully registered` });
         } catch (err) {
-          res.status(500).json({ message: `save() error: ${err}`});
+          res.status(500).json({ message: `save() error: ${err}` });
         }
       }
     });
