@@ -39,13 +39,14 @@ const registerController = (req, res) => {
       if (item) {
         res.status(401).json({ message: `user ${user.username}, already exists..` });
 
-        // register new user
+      // register new user
       } else {
         try {
           new UserModel({
             username: user.username,
             password: user.password,
-            email: user.email
+            email: user.email,
+            level: 2
           }).save();
 
           res.status(200).json({ message: `${user.username} has been successfully registered` });
