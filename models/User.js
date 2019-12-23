@@ -9,7 +9,10 @@ const UserSchema = mongoose.Schema({
   },
   password: String,
   email: String,
-  level: Number,
+  level: {
+    type: Number,
+    default: 2
+  },
   token: String,
 
   // current order

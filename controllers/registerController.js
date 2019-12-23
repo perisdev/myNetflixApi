@@ -45,8 +45,7 @@ const registerController = (req, res) => {
           new UserModel({
             username: user.username,
             password: user.password,
-            email: user.email,
-            level: 2
+            email: user.email
           }).save();
 
           res.status(200).json({ message: `${user.username} has been successfully registered` });
